@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="ISO-8859-1">
+        <title>Modificar Sensor</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/formulario.css">
+    </head>
+    <body>
+
+        <!-- Correcto -->
+        <div th:replace="fragments/navbar :: navbar"></div>
+
+        <div class="container-fluid m-5 contenedor">
+
+
+
+
+            <form class="formulario" th:action="@{/viatran/modificar/__${viatran.serial}__}" method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <!--  <input type="text" th:value= "${serial}" name="serial" readonly  >  -->
+                    <!-- Mostrar el serial en negrita y grande -->
+                    <label><strong class="fs-5">Serial: <span th:text="${serial}"></span></strong></label>
+                    <!-- Campo oculto que viaja en el formulario -->
+                    <input type="hidden" th:value="${serial}" name="serial">
+
+
+                    <div class="form-group my-3">
+                        <label class="mb-2">Modificar Sensor</label> 
+                        <div class="col-md-4 form-group my-3">
+                            <label for="idSensor">Seleccionar Instrumento</label>
+                            <select name="idSensor" class="form-control">
+                                <option disabled>Seleccionar Instrumento</option>
+                                <option th:each="instrumento : ${instrumentos}" 
+                                        th:value="${instrumento.idSensor}" 
+                                        th:text="${instrumento.modelo}" 
+                                        th:selected="${instrumento.idSensor == viatran.modelo.idSensor}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Campo Fecha Alta -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="fechaalta">Fecha Alta</label>
+                        <input type="date" name="fechaalta" class="form-control" pattern="\d{4}-\d{2}-\d{2}" th:value="${viatran.fechaalta}" required>
+                    </div>
+
+                    <!-- Campo Certificado -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="certificado">Num Cert</label>
+                        <input type="number" class="form-control" name="certificado" th:value="${viatran.certificado}" placeholder="Num cert">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Campo Fecha Calibración -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="fechacal">Fecha Calibracion</label>
+                        <input type="date" name="fechacal" class="form-control" pattern="\d{4}-\d{2}-\d{2}" th:value="${viatran.fechacal}" >
+                    </div>
+
+                    <!-- Lista de Servicio -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="servicio">Servicio</label>
+                        <select name="servicio" class="form-control">
+                            <option value="Frac01" th:selected="${viatran.servicio == 'Frac01'}">Frac01</option>
+                            <option value="Frac02" th:selected="${viatran.servicio == 'Frac02'}">Frac02</option>
+                            <option value="Frac03" th:selected="${viatran.servicio == 'Frac03'}">Frac03</option>
+                            <option value="CT01" th:selected="${viatran.servicio == 'CT01'}">CT01</option>
+                            <option value="CT02" th:selected="${viatran.servicio == 'CT02'}">CT02</option>
+                            <option value="CT03" th:selected="${viatran.servicio == 'CT03'}">CT03</option>
+                            <option value="Base" th:selected="${viatran.servicio == 'Base'}">Base</option>
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Lista de Estado -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="estado">Estado</label>
+                        <select name="estado" class="form-control">
+                            <option value="OK" th:selected="${viatran.estado == 'OK'}">OK</option>
+                            <option value="Calibracion" th:selected="${viatran.estado == 'Calibracion'}">Calibracion</option>
+                            <option value="Vencido" th:selected="${viatran.estado == 'Vencido'}">Vencido</option>
+                            <option value="Reparacion" th:selected="${viatran.estado == 'Reparacion'}">Reparacion</option>
+                            <option value="Scrap" th:selected="${viatran.estado == 'Scrap'}">Scrap</option>
+
+                        </select>
+                    </div>
+
+                    <!--  Selector de archivo para Certificado 
+                     <div class="col-md-4 form-group my-3">
+                         <label for="archivoSelector">Seleccionar Certificado</label>
+                         <div class="input-group">
+                    <!-- Visible al usuario (solo muestra el nombre del archivo) 
+                    <input type="text" id="rutaCertificadoVisible" class="form-control" 
+                           placeholder="Selecciona un archivo..." 
+                           th:value="${#strings.substringAfter(viatran.link, 'C:/mis_certificados/')}" 
+                           readonly>
+
+
+                    <!-- Oculto: el que se envía realmente 
+                    <input type="hidden" id="rutaCertificado" name="rutaCertificado" th:value="${#strings.substringAfter(viatran.link, 'C:/mis_certificados/')}">
+
+                    <!-- Input file escondido 
+                    <input type="file" id="archivoSelector" class="form-control" style="display: none;">
+
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('archivoSelector').click();">
+                        Buscar Archivo
+                    </button> 
+                   
+
+
+                </div>
+            </div> -->
+
+                    <!-- Selector de archivo para Certificado 
+                    <div class="col-md-4 form-group my-3">
+                        <label for="archivoSelector">Seleccionar Certificado</label>
+                        <div class="input-group">
+                    <!-- Campo visible con mensaje si ya hay certificado 
+                    <input type="text" id="rutaCertificadoVisible" class="form-control"
+                           th:value="${viatran.certificadoPdf != null ? 'Certificado ya cargado' : ''}"
+                           placeholder="Selecciona un archivo..."
+                           readonly>
+
+                    <!-- Input file escondido (el que abre el selector) 
+                    <input type="file" id="archivoSelector" name="certificadoPdf" class="form-control" style="display: none;">
+
+                    <!-- Botón para abrir el selector 
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('archivoSelector').click();">
+                        Buscar Archivo
+                    </button>
+                </div>
+
+                    <!-- Mensaje de ayuda 
+                    <small th:if="${viatran.certificadoPdf != null}" class="text-success"> Certificado ya guardado en la base de datos.</small>
+                    <small th:if="${viatran.certificadoPdf == null}" class="text-muted">Todavía no hay un certificado cargado</small>
+                </div> -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="certificadoPdf">Seleccionar Certificado</label>
+                        <div class="input-group">
+                            <input type="file"
+                                   id="certificadoPdf"
+                                   name="certificadoPdf"
+                                   class="form-control"
+                                   accept="application/pdf"
+                                   onchange="mostrarNombre(this)" />
+                        </div>
+                        <small class="form-text text-muted">Solo PDF con maximo permitido: 2 MB</small>
+
+                        <!-- Mostrar el nombre del archivo ya cargado -->
+                        <div th:if="${viatran.certificadoPdf != null}">
+                            <small class="text-muted">Certificado actual: <span th:text="'certificado_' + ${viatran.certificado} + '.pdf'"></span></small>
+                        </div>
+
+                        <!-- Mostrar el nuevo nombre si el usuario elige otro -->
+                        <div id="archivoNuevo" style="margin-top: 5px;"></div>
+                    </div>
+
+
+                    <div class="row"> 
+                        <!-- Periodo de calibracion -->
+                        <div class="col-md-4 form-group my-3">
+                            <label for="periodo">Periodo de calibracion</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="periodo" min="1" max="60"
+                                       th:value="${viatran.periodo != null ? viatran.periodo : 12}">
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- Botón Guardar -->
+                <button type="submit" class="btn btn-primary mt-3 botones">Guardar</button>
+            </form>
+
+            <div class="d-flex gap-2 mt-3">
+                <!-- Botón eliminar -->
+                <form th:action="@{/viatran/eliminar/{serial}(serial=${viatran.serial})}" method="get"
+                      onsubmit="return confirm('¿Estas seguro de que queres desactivar este sensor?');">
+                    <button type="submit" class="btn btn-danger mt-3">Baja</button>
+                </form>
+
+                <!-- Botón alta -->
+                <form th:action="@{/viatran/alta/{serial}(serial=${viatran.serial})}" method="get"
+                      onsubmit="return confirm('¿Estas seguro de que queres activar este sensor?');">
+                    <button type="submit" class="btn btn-danger mt-3">Alta</button>
+                </form>
+            </div>
+            <form th:action="@{/viatran/eliminar-definitivo/{serial}(serial=${viatran.serial})}" method="get"
+                  onsubmit="return confirm('¿Estas seguro de que queres eliminar definitivamente este sensor?');">
+                <button type="submit" class="btn btn-danger mt-3">Eliminar definitivo</button>
+            </form>
+
+            <div th:if="${exito}!=null" class="card text-white bg-success mb-3 mt-3 mensajeExito" >
+                <div class="card-body">
+                    <h5 class="card-title">Exito </h5>
+                    <p class="card-text" th:text="${exito}"></p>
+                </div>
+            </div>
+            <div th:if="${error}!=null" class="card text-white bg-danger mb-3 mensajeError" >
+                <div class="card-body">
+                    <h5 class="card-title">Error </h5>
+                    <p class="card-text" th:text="${error}"></p>
+                </div>
+            </div>
+            <section class=" text-center container">
+                <div class="row mt-3">
+                    <div class="divVolver">
+                        <a th:href="@{/viatran/lista}" class="btn btn-secondary my-2 botonVolver botones">Volver</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+        <!--   <script>
+               document.getElementById('archivoSelector').addEventListener('change', function(event) {
+               let archivo = event.target.files[0];
+               if (archivo) {
+               document.getElementById('rutaCertificadoVisible').value = archivo.name;
+               document.getElementById('rutaCertificado').value = archivo.name;
+               }
+               });
+           </script> -->
+
+        <script>
+            function validarTamano(input) {
+            const maxSizeMB = 2;
+            const file = input.files[0];
+            if (file && file.size > maxSizeMB * 1024 * 1024) {
+            alert("El archivo supera el maximo permitido de " + maxSizeMB + " MB.");
+            input.value = ""; // Limpia el campo para evitar el envío
+            }
+            }
+        </script>
+
+        <script>
+            function mostrarNombre(input) {
+            const archivo = input.files[0];
+            if (archivo) {
+            document.getElementById("archivoNuevo").innerHTML = 
+            `<small class="text-info">Archivo seleccionado: ${archivo.name}</small>`;
+            }
+            }
+        </script>
+
+    </body>
+</html>

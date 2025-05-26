@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="ISO-8859-1">
+        <title>Registro de Sensores de Presión</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/formulario.css">
+
+    </head>
+    <body>
+
+        <!-- Correcto -->
+        <div th:replace="fragments/navbar :: navbar"></div>
+
+
+
+        <div class="container-fluid m-5 contenedor">
+
+
+            <form class="formulario" action="/viatran/registro" method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <!-- Campo Serial -->
+                    <div class="col-md-4 form-group my-3">
+                        <label class="mb-2">Serial</label> 
+                        <input type="number" class="form-control" name="Serial" placeholder="Serial" required>
+                    </div>
+
+                    <!-- Lista de Instrumentos -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="idSensor">Seleccionar Instrumento</label>
+                        <select name="idSensor" class="form-control" required>
+
+                            <option th:each="instrumento : ${instrumentos}" 
+                                    th:value="${instrumento.idSensor}" 
+                                    th:text="${instrumento.modelo}"/>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Campo Fecha Alta -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="fechaalta">Fecha Alta</label>
+                        <input type="date" name="fechaalta" class="form-control" pattern="\d{4}-\d{2}-\d{2}" required>
+                    </div>
+
+                    <!-- Campo OT -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="certificado">Num Cert</label>
+                        <input type="number" class="form-control" name="certificado" placeholder="Num cert">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Campo Fecha Calibración -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="fechacal">Fecha Calibracion</label>
+                        <input type="date" name="fechacal" class="form-control" pattern="\d{4}-\d{2}-\d{2}" >
+                    </div>
+
+                    <!-- Lista de Servicio -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="servicio">Servicio</label>
+                        <select name="servicio" class="form-control" required>
+                            <option value="Frac01">Frac01</option>
+                            <option value="Frac02">Frac02</option>
+                            <option value="Frac03">Frac03</option>
+                            <option value="CT01">CT01</option>
+                            <option value="CT02">CT02</option>
+                            <option value="CT03">CT03</option>
+                            <option value="Base">Base</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Lista de Estado -->
+                    <div class="col-md-4 form-group my-3">
+                        <label for="estado">Estado</label>
+                        <select name="estado" class="form-control">
+                            <option value="OK">OK</option>
+                            <option value="Calibracion">Calibracion</option>
+                            <option value="Reparacion">Reparacion</option>
+                            <option value="Scrap">Scrap</option>
+                            <option value="Vencido">Vencido</option>
+                        </select>
+                    </div>
+
+                    <!-- Selector de archivo para Certificado 
+                    <div class="col-md-4 form-group my-3">
+                        <label for="archivoSelector">Seleccionar Certificado</label>
+                        <div class="input-group">
+                            <input type="text" id="rutaCertificado" class="form-control" name="rutaCertificado" placeholder="Selecciona un archivo..." readonly>
+                            <input type="file" id="archivoSelector" class="form-control" style="display: none;">
+                            <button type="button" class="btn btn-primary" onclick="document.getElementById('archivoSelector').click();">
+                                Buscar Archivo
+                            </button>
+                        </div>
+                    </div> 
+
+                    <div class="col-md-4 form-group my-3">
+                        <label for="certificadoPdf">Seleccionar Certificado</label>
+                        <div class="input-group">
+                            <input type="text" id="rutaCertificado" class="form-control" placeholder="Selecciona un archivo..." readonly>
+                            <input type="file" id="certificadoPdf" name="certificadoPdf" class="form-control" style="display: none;" onchange="mostrarNombreArchivo(this)">
+                            <button type="button" class="btn btn-primary" onclick="document.getElementById('certificadoPdf').click();">
+                                Buscar Archivo
+                            </button>
+                        </div>
+                    </div> -->
+
+                    <div class="col-md-4 form-group my-3">
+                        <label for="certificadoPdf">Seleccionar Certificado</label>
+                        <div class="input-group">
+                            <input type="file"
+                                   id="certificadoPdf"
+                                   name="certificadoPdf"
+                                   class="form-control"
+                                   accept="application/pdf"
+                                   onchange="mostrarNombre(this)" />
+                        </div>
+                        <small class="form-text text-muted">Solo PDF con maximo permitido: 2 MB</small>
+
+                        <!-- Mostrar el nombre del archivo ya cargado 
+                        <div th:if="${viatran.certificadoPdf != null}">
+                            <small class="text-muted">Certificado actual: <span th:text="'certificado_' + ${viatran.certificado} + '.pdf'"></span></small>
+                        </div> -->
+
+                        <!-- Mostrar el nuevo nombre si el usuario elige otro -->
+                        <div id="archivoNuevo" style="margin-top: 5px;"></div> 
+                    </div>
+
+
+
+                    <div class="row"> 
+                        <div class="col-md-4 form-group my-3">
+                            <label for="periodo">Periodo de calibracion (meses)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="periodo" min="1" max="60"
+                                       th:value="${viatran != null and viatran.periodo != null ? viatran.periodo : 12}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <!-- Botón Guardar -->
+                <button type="submit" class="btn btn-primary mt-3 botones">Guardar</button>
+            </form>
+
+
+            <div th:if="${exito}!=null" class="card text-white bg-success mb-3 mt-3 mensajeExito" >
+                <div class="card-body">
+                    <h5 class="card-title">Exito </h5>
+                    <p class="card-text" th:text="${exito}"></p>
+                </div>
+            </div>
+            <div th:if="${error}!=null" class="card text-white bg-danger mb-3 mensajeError" >
+                <div class="card-body">
+                    <h5 class="card-title">Error </h5>
+                    <p class="card-text" th:text="${error}"></p>
+                </div>
+            </div>
+
+
+            <section class="text-center container">
+                <div class="row mt-3">
+                    <div class="divVolver">
+                        <a th:href="@{/viatran/lista}" class="btn btn-secondary my-2 botonVolver botones">Volver</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!--   <footer class="text-muted py-5">
+               <div class="containerFooter">
+                   <p class="mb-1">Album example is &copy; Bootstrap,<br>but please download and customize it for yourself!</p>
+                   <p class="mb-0">New to Bootstrap? <a href="/"><br>Visit the homepage</a> or read our <a href="../getting-started/introduction/">getting started guide</a>.</p>
+                   <p class="float-end mb-1">
+                       <a href="#" style="text-decoration:none"><span>â¬ï¸</span> Back to top</a>
+                   </p>
+               </div>
+           </footer> 
+
+        <script>
+            document.getElementById('archivoSelector').addEventListener('change', function(event) {
+            let archivo = event.target.files[0];
+            if (archivo) {
+            document.getElementById('rutaCertificado').value = archivo.name;
+            }
+            });
+        </script> 
+
+        <script>
+            function mostrarNombreArchivo(input) {
+            const fileName = input.files.length > 0 ? input.files[0].name : "";
+            document.getElementById("rutaCertificado").value = fileName;
+            }
+        </script> -->
+
+        <script>
+            function validarTamano(input) {
+            const maxSizeMB = 2;
+            const file = input.files[0];
+            if (file && file.size > maxSizeMB * 1024 * 1024) {
+            alert("El archivo supera el maximo permitido de " + maxSizeMB + " MB.");
+            input.value = ""; // Limpia el campo para evitar el envío
+            }
+            }
+        </script>
+
+        <script>
+            function mostrarNombre(input) {
+            const archivo = input.files[0];
+            if (archivo) {
+            document.getElementById("archivoNuevo").innerHTML = 
+            `<small class="text-info">Archivo seleccionado: ${archivo.name}</small>`;
+            }
+            }
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+    </body>
+
+</html>
