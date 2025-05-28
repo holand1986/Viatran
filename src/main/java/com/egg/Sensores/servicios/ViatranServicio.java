@@ -209,7 +209,7 @@ public class ViatranServicio {
         return listarInactivos().size();
     }
 
-    @Scheduled(cron = "0 0 0 * * ?") // Todos los días a medianoche
+    @Scheduled(cron = "0 0 6,14,22 * * ?") // Todos los días a medianoche
     //@Scheduled(fixedRate = 1000000) // Cada 10 segundos
     public void actualizarVencimientos() {
         LocalDate hoy = LocalDate.now();
