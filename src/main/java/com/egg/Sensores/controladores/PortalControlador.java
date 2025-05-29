@@ -33,7 +33,7 @@ public class PortalControlador {
     public String registrar(){
         return "registro.html";
     } 
-    
+      
     @PostMapping("/registro")
     public String registro(@RequestParam String nombre, @RequestParam String email, @RequestParam String password,
             String password2, ModelMap modelo, MultipartFile archivo) {
