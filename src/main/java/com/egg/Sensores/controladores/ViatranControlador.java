@@ -279,7 +279,7 @@ public class ViatranControlador {
         try {
             // Construye la URL dinámica
             String baseUrl = request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath());
-            String linkDescarga = baseUrl + "/descargar/" + serial;
+            String linkDescarga = baseUrl + "/viatran/descargar/" + serial;
 
             BitMatrix matrix = new QRCodeWriter().encode(linkDescarga, BarcodeFormat.QR_CODE, size, size);
             BufferedImage image = MatrixToImageWriter.toBufferedImage(matrix);
