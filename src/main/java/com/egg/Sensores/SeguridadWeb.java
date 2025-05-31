@@ -30,7 +30,7 @@ public class SeguridadWeb extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/img/**").permitAll() // Archivos estáticos libres
                 .antMatchers("/registro", "/registrar").permitAll() // acceso público al registro
-                .antMatchers("/descargar/**", "/qr/**").permitAll() // 👈 Hacer público el QR y descarga
+                .antMatchers("/viatran/descargar/**", "/qr/**").permitAll() // 👈 Hacer público el QR y descarga
                 .antMatchers("/admin/**").hasRole("ADMIN") // Solo ADMIN puede acceder a /admin/**
                 .anyRequest().hasAnyRole("USER", "ADMIN") // El resto requiere USER o ADMIN
                 .and().formLogin()
